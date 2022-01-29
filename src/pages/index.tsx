@@ -1,11 +1,38 @@
-import * as React from "react"
-import { Link, graphql } from "gatsby"
+import React from "react"
+import { Link, graphql, PageProps } from "gatsby"
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import { Bio } from "../components/bio"
+import { Layout } from "../components/layout"
+import { Seo } from "../components/seo"
 
-const BlogIndex = ({ data, location }) => {
+export interface FrontMatter {
+  title: string
+  date: string
+  description: string
+}
+
+export interface DataProps {
+  previous: string
+  next: string
+  markdownRemark: string
+  site: {
+    siteMetadata: {
+      title: string
+    }
+  }
+  allMarkdownRemark: {
+    frontmatter: FrontMatter
+    nodes: {
+      frontmatter: FrontMatter
+      fields: {
+        slug: string
+      }
+      excerpt: string
+    }[]
+  }
+}
+
+const Home = ({ data, location }: PageProps<DataProps>) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const posts = data.allMarkdownRemark.nodes
 
@@ -63,7 +90,7 @@ const BlogIndex = ({ data, location }) => {
   )
 }
 
-export default BlogIndex
+export default Home
 
 export const pageQuery = graphql`
   query {
